@@ -4,6 +4,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import ru.ivanems.task.aspect.LogExecutionTime;
 import ru.ivanems.task.aspect.LogTaskUpdate;
+import ru.ivanems.task.dto.TaskDTO;
+import ru.ivanems.task.dto.TaskMapper;
 import ru.ivanems.task.entity.Task;
 import ru.ivanems.task.repository.TaskRepository;
 
@@ -12,44 +14,48 @@ import java.util.List;
 @Service
 public class TaskService {
 
+    private final TaskMapper taskMapper;
     private final TaskRepository taskRepository;
 
-    public TaskService(TaskRepository taskRepository) {
+    public TaskService(TaskMapper taskMapper, TaskRepository taskRepository) {
+        this.taskMapper = taskMapper;
         this.taskRepository = taskRepository;
     }
 
-    public List<Task> getTasks() {
-        return taskRepository.findAll();
+    private Task getTask (Long id) {
+        return taskRepository.findById(id)
+                .orElseThrow(() -> new NullPointerException("Task with ID " + id + " not found"));
     }
 
-    public Task getTaskById(Long id) {
-        Task task = taskRepository.findById(id).orElse(null);
-
-        if (task == null)
-            throw new NullPointerException("Task with ID " + id + " not found");
-
-        return task;
+    public List<TaskDTO> getTasks() {
+        return taskRepository.findAll().stream()
+                .map(taskMapper::toDTO)
+                .toList();
     }
 
-    @LogTaskUpdate
-    @LogExecutionTime
-    public Task createTask(Task task) {
-        return taskRepository.saveAndFlush(task);
+    public TaskDTO getTaskById(Long id) {
+        return taskMapper.toDTO(getTask(id));
     }
 
     @LogTaskUpdate
     @LogExecutionTime
-    public Task updateTask(Long id, Task task) {
-        Task taskToUpdate = getTaskById(id);
+    public TaskDTO createTask(TaskDTO taskDTO) {
+        Task task = new Task();
+        BeanUtils.copyProperties(taskDTO, task, "id");
+        return taskMapper.toDTO(taskRepository.saveAndFlush(task));
+    }
 
-        BeanUtils.copyProperties(task, taskToUpdate, "id");
-        return taskRepository.save(taskToUpdate);
+    @LogTaskUpdate
+    @LogExecutionTime
+    public TaskDTO updateTask(Long id, TaskDTO taskDTO) {
+        Task taskToUpdate = getTask(id);
+        BeanUtils.copyProperties(taskDTO, taskToUpdate, "id");
+        return taskMapper.toDTO(taskRepository.saveAndFlush(taskToUpdate));
     }
 
     @LogExecutionTime
     public void deleteTask(Long id) {
-        Task task = getTaskById(id);
-
+        Task task = getTask(id);
         taskRepository.delete(task);
     }
 

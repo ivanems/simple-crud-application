@@ -1,7 +1,7 @@
 package ru.ivanems.task.controller;
 
 import org.springframework.web.bind.annotation.*;
-import ru.ivanems.task.entity.Task;
+import ru.ivanems.task.dto.TaskDTO;
 import ru.ivanems.task.service.TaskService;
 
 import java.util.List;
@@ -18,22 +18,22 @@ public class TaskController {
     }
 
     @GetMapping
-    public List<Task> getTasks() {
+    public List<TaskDTO> getTasks() {
         return taskService.getTasks();
     }
 
     @GetMapping("/{id}")
-    public Task getTaskById(@PathVariable Long id) {
+    public TaskDTO getTaskById(@PathVariable Long id) {
         return taskService.getTaskById(id);
     }
 
     @PostMapping
-    public Task createTask(@RequestBody Task task) {
+    public TaskDTO createTask(@RequestBody TaskDTO task) {
         return taskService.createTask(task);
     }
 
     @PutMapping("/{id}")
-    public Task updateTask(@PathVariable Long id, @RequestBody Task task) {
+    public TaskDTO updateTask(@PathVariable Long id, @RequestBody TaskDTO task) {
         return taskService.updateTask(id, task);
     }
 
