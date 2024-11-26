@@ -12,6 +12,7 @@ public class TaskMapper {
         taskDTO.setTitle(task.getTitle());
         taskDTO.setDescription(task.getDescription());
         taskDTO.setUserId(task.getUserId());
+        taskDTO.setTaskType(task.getTaskType());
         return taskDTO;
     }
 
@@ -21,6 +22,7 @@ public class TaskMapper {
         task.setTitle(taskDTO.getTitle());
         task.setDescription(taskDTO.getDescription());
         task.setUserId(taskDTO.getUserId());
+        task.setTaskType(taskDTO.getTaskType());
         return task;
     }
 

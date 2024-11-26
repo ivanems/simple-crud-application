@@ -1,6 +1,7 @@
 package ru.ivanems.task.entity;
 
 import jakarta.persistence.*;
+import ru.ivanems.task.entity.util.TaskType;
 
 @Entity
 @Table(name = "task")
@@ -15,6 +16,8 @@ public class Task {
     private String description;
 
     private Long userId;
+
+    private TaskType taskType;
 
     public Long getId() {
         return id;
@@ -48,6 +51,14 @@ public class Task {
         this.userId = userId;
     }
 
+    public TaskType getTaskType() {
+        return taskType;
+    }
+
+    public void setTaskType(TaskType taskType) {
+        this.taskType = taskType;
+    }
+
     @Override
     public String toString() {
         return "Task{" +
@@ -55,6 +66,7 @@ public class Task {
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", userId=" + userId +
+                ", taskType=" + taskType +
                 '}';
     }
 

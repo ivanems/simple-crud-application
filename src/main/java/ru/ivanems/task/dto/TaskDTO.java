@@ -1,9 +1,12 @@
 package ru.ivanems.task.dto;
 
+import ru.ivanems.task.entity.util.TaskType;
+
 public class TaskDTO {
 
     private Long id, userId;
     private String title, description;
+    private TaskType taskType;
 
     public Long getId() {
         return id;
@@ -37,11 +40,20 @@ public class TaskDTO {
         this.description = description;
     }
 
-    public TaskDTO(Long id, String title, String description, Long userId) {
+    public TaskType getTaskType() {
+        return taskType;
+    }
+
+    public void setTaskType(TaskType taskType) {
+        this.taskType = taskType;
+    }
+
+    public TaskDTO(Long id, Long userId, String title, String description, TaskType taskType) {
         this.id = id;
         this.userId = userId;
         this.title = title;
         this.description = description;
+        this.taskType = taskType;
     }
 
     public TaskDTO() {}
