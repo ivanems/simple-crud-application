@@ -17,6 +17,7 @@ public class Task {
 
     private Long userId;
 
+    @Enumerated(EnumType.STRING)
     private TaskType taskType;
 
     public Long getId() {
