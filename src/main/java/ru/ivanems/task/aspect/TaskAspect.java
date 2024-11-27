@@ -1,11 +1,10 @@
 package ru.ivanems.task.aspect;
 
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -13,16 +12,15 @@ import ru.ivanems.task.entity.Task;
 
 @Aspect
 @Component
+@Slf4j
 public class TaskAspect {
-
-    private static final Logger logger = LoggerFactory.getLogger(TaskAspect.class);
 
     @Before(
             "@within(org.springframework.web.bind.annotation.RestController)"
     )
     public void logRequestIP(JoinPoint joinPoint) {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-        logger.info("Request send from IP: {}, method: {}", request.getRemoteAddr(), joinPoint.getSignature());
+        log.info("Request send from IP: {}, method: {}", request.getRemoteAddr(), joinPoint.getSignature());
     }
 
     @AfterReturning(
@@ -30,7 +28,7 @@ public class TaskAspect {
             returning = "task"
     )
     public void logCreateTask(JoinPoint joinPoint, Task task) {
-        logger.info("Task with ID {} was created or updated: {}", task.getId(), task);
+        log.info("Task with ID {} was created or updated: {}", task.getId(), task);
     }
 
     @AfterThrowing(
@@ -38,7 +36,7 @@ public class TaskAspect {
             throwing = "exception"
     )
     public void logException(JoinPoint joinPoint, Exception exception) {
-        logger.error("Exception was thrown: {}, message: {}", joinPoint.getSignature(), exception.getMessage());
+        log.error("Exception was thrown: {}, message: {}", joinPoint.getSignature(), exception.getMessage());
     }
 
     @Around(
@@ -52,7 +50,7 @@ public class TaskAspect {
             throw new RuntimeException(e);
         } finally {
             long executionTime = System.currentTimeMillis() - start;
-            logger.info("Method {} execution time: {} ms", joinPoint.getSignature(), executionTime);
+            log.info("Method {} execution time: {} ms", joinPoint.getSignature(), executionTime);
         }
     }
 

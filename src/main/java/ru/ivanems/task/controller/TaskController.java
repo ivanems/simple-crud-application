@@ -1,5 +1,6 @@
 package ru.ivanems.task.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.ivanems.task.dto.TaskDTO;
 import ru.ivanems.task.service.TaskService;
@@ -8,14 +9,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/tasks")
-
+@RequiredArgsConstructor
 public class TaskController {
 
     private final TaskService taskService;
-
-    public TaskController(TaskService taskService) {
-        this.taskService = taskService;
-    }
 
     @GetMapping
     public List<TaskDTO> getTasks() {
