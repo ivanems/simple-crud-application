@@ -9,6 +9,8 @@ import org.springframework.stereotype.Component;
 import ru.ivanems.task.dto.TaskDTO;
 import ru.ivanems.task.service.NotificationService;
 
+import java.util.List;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -17,8 +19,7 @@ public class KafkaTaskConsumer {
     private final NotificationService notificationService;
 
     @KafkaListener(topics = "${task.kafka.client.topic}", groupId = "${task.kafka.consumer.group-id}")
-    public void listen(@Payload TaskDTO taskDTO, Acknowledgment ack) {
-
+    public void listen(@Payload List<TaskDTO> taskDTO, Acknowledgment ack) {
         try {
             notificationService.sendNotification(taskDTO);
             log.info("Task processed successfully: {}", taskDTO);

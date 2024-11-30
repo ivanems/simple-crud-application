@@ -1,38 +1,37 @@
 package ru.ivanems.task.config;
 
-import org.springframework.beans.factory.annotation.Value;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import java.util.Properties;
 
+@Getter
+@Setter
 @Configuration
+@ConfigurationProperties(prefix = "task.mail")
 public class MailConfig {
 
-    @Value("${mail.host}")
     private String host;
 
-    @Value("${mail.port}")
     private int port;
 
-    @Value("${mail.username}")
     private String username;
 
-    @Value("${mail.password}")
     private String password;
 
-    @Value("${mail.smtpAuth}")
     private boolean smtpAuth;
 
-    @Value("${mail.startTlsEnabled}")
     private boolean startTlsEnabled;
 
-    @Value("${mail.sslEnabled}")
     private boolean sslEnabled;
 
-    @Value("${mail.fromEmail}")
     private String fromEmail;
+
+    private String toEmail;
 
     @Bean
     public JavaMailSender javaMailSender() {
