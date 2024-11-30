@@ -1,8 +1,15 @@
 package ru.ivanems.task.entity;
 
 import jakarta.persistence.*;
+import lombok.*;
+import ru.ivanems.task.entity.util.TaskType;
 
 @Entity
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "task")
 public class Task {
 
@@ -16,47 +23,7 @@ public class Task {
 
     private Long userId;
 
-    public Long getId() {
-        return id;
-    }
+    @Enumerated(EnumType.STRING)
+    private TaskType taskType;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    @Override
-    public String toString() {
-        return "Task{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", userId=" + userId +
-                '}';
-    }
-
-    public Task() {}
 }
