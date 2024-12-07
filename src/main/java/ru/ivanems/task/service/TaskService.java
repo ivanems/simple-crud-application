@@ -3,8 +3,8 @@ package ru.ivanems.task.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
-import ru.ivanems.task.aspect.LogExecutionTime;
-import ru.ivanems.task.aspect.LogTaskUpdate;
+import ru.ivanems.logger.aspect.util.LogBeforeExecution;
+import ru.ivanems.logger.aspect.util.LogTimeExecution;
 import ru.ivanems.task.dto.TaskDTO;
 import ru.ivanems.task.dto.TaskMapper;
 import ru.ivanems.task.entity.Task;
@@ -27,6 +27,8 @@ public class TaskService {
                 .orElseThrow(() -> new NullPointerException("Task with ID " + id + " not found"));
     }
 
+    @LogBeforeExecution
+    @LogTimeExecution
     public List<TaskDTO> getTasks() {
         return taskRepository.findAll().stream()
                 .map(taskMapper::toDTO)
@@ -37,16 +39,12 @@ public class TaskService {
         return taskMapper.toDTO(getTask(id));
     }
 
-    @LogTaskUpdate
-    @LogExecutionTime
     public TaskDTO createTask(TaskDTO taskDTO) {
         Task task = new Task();
         BeanUtils.copyProperties(taskDTO, task, "id");
         return taskMapper.toDTO(taskRepository.saveAndFlush(task));
     }
 
-    @LogTaskUpdate
-    @LogExecutionTime
     public TaskDTO updateTask(Long id, TaskDTO taskDTO) {
         Task taskToUpdate = getTask(id);
 
@@ -60,7 +58,6 @@ public class TaskService {
         return taskMapper.toDTO(taskToUpdate);
     }
 
-    @LogExecutionTime
     public void deleteTask(Long id) {
         Task task = getTask(id);
         taskRepository.delete(task);
